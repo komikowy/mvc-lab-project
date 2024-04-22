@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        main {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            margin-bottom: 20px;
+        }
+
+        section h3 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .rating {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .rating p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/recipe">Recipe List</a>
+        </nav>
+        <h1><%= recipe.name %></h1>
+
+        <section>
+            <h3>Ingredients:</h3>
+            <p><%= recipe.ingredients %></p>
+        </section>
+
+        <section>
+            <h3>Instructions:</h3>
+            <p><%= recipe.instructions %></p>
+        </section>
+
+        <section>
+            <h3>Comments:</h3>
+            <% recipe.comments.forEach(comment => { %>
+                <p><%= comment.text %></p>
+            <% }); %>
+        </section>
+
+        <section>
+            <h3>Add a Comment:</h3>
+            <form action="/comment/add" method="POST">
+                <input type="hidden" name="recipeId" value="<%= recipe.id %>">
+                <textarea name="text" required></textarea><br>
+                <label for="rating">Rating:</label>
+                <select name="rating" id="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select><br>
+                <button type="submit">Add Comment</button>
+            </form>
+        </section>
+
+        <div class="rating">
+            <h3>Overall Rating:</h3>
+            <% if (recipe.rating !== null) { %>
+                <p><%= recipe.rating.toFixed(1) %></p>
+            <% } else { %>
+                <p>No ratings yet.</p>
+            <% } %>
+        </div>
+
+        <form action="/recipe/<%= recipe.id %>/edit" method="GET">
+            <button type="submit">Edit Recipe</button>
+        </form>
+
+        <form action="/recipe/<%= recipe.id %>/delete" method="POST">
+            <button type="submit">Delete Recipe</button>
+        </form>
+    </main>
+</body>
+</html>
